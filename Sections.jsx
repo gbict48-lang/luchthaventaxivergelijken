@@ -1,6 +1,6 @@
 /* Lower page sections: airports grid, why-cards, CTA band, footer. */
 
-function AirportsGrid({ active, onPick }) {
+function AirportsGrid({ onPick }) {
   const euro = window.euro;
   return (
     <section className="airports" id="luchthavens">
@@ -8,13 +8,13 @@ function AirportsGrid({ active, onPick }) {
         <h2 className="section-title">Wij rijden naar alle grote luchthavens</h2>
         <div className="airport-grid">
           {Object.keys(window.AIRPORTS).map((code) => {
+            const a = window.AIRPORTS[code];
             const from = window.ownFare("almere", code);
+            const place = { title: a.name, subtitle: "Luchthaven", city: a.name, lat: a.lat, lon: a.lon };
             return (
-              <div key={code}
-                   className={"airport-card" + (code === active ? " active" : "")}
-                   onClick={() => onPick(code)}>
-                <div className="a-ico">{window.AIRPORTS[code].ico}</div>
-                {window.AIRPORTS[code].name}
+              <div key={code} className="airport-card" onClick={() => onPick(place)}>
+                <div className="a-ico">{a.ico}</div>
+                {a.name}
                 <span className="a-from">v.a. {euro(from.sedan)}</span>
               </div>
             );

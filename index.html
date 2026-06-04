@@ -72,7 +72,35 @@
   <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
-  <script src="data.js"></script>
+  <!-- app pricing engine (quotesFor, Geo, Booking, PROVIDERS) + address autocomplete -->
+  <script src="app/data.js"></script>
+  <script src="app/places.js"></script>
+  <script>
+    /* Globals voor de marketing-componenten (Header/Footer/CtaBand/AirportsGrid),
+       afgeleid uit de app-engine — alleen window.* assignments, dus geen dubbele declaraties. */
+    window.PHONE = "0362222222";
+    window.BOOKING_URL = "https://www.airportservicealmere.nl/";
+    window.AIRPORTS = {
+      AMS: { name: "Schiphol",            ico: "🛫", lat: 52.3105, lon: 4.7683 },
+      EIN: { name: "Eindhoven Airport",   ico: "✈️", lat: 51.4501, lon: 5.3745 },
+      RTM: { name: "Rotterdam The Hague", ico: "🛩️", lat: 51.9569, lon: 4.4377 },
+      LEY: { name: "Lelystad Airport",    ico: "🛬", lat: 52.4604, lon: 5.5272 },
+      DUS: { name: "Düsseldorf Airport",  ico: "✈️", lat: 51.2895, lon: 6.7668 },
+      NRN: { name: "Weeze / Niederrhein", ico: "✈️", lat: 51.6024, lon: 6.1422 },
+      BRU: { name: "Brussels Airport",    ico: "🛫", lat: 50.9014, lon: 4.4844 },
+      CRL: { name: "Brussels Charleroi",  ico: "✈️", lat: 50.4592, lon: 4.4538 }
+    };
+    window.ownFare = function (_city, code) {
+      var a = window.AIRPORTS[code];
+      var almere = { city: "Almere", lat: 52.3508, lon: 5.2647 };
+      var dest = { city: a.name, lat: a.lat, lon: a.lon };
+      var m = window.Geo.metrics(almere, dest);
+      var trip = { origin: almere, destination: dest, originCity: "Almere", destinationCity: a.name, distanceKm: m.km, durationMinutes: m.minutes };
+      var qs = window.quotesFor(trip, new Date());
+      var mine = qs.find(function (q) { return q.provider === "TaxiGeld"; }) || qs[0];
+      return { sedan: Math.round(mine.price) };
+    };
+  </script>
 </head>
 <body id="top">
   <!-- Toegankelijke, crawlbare kop voordat React laadt -->
@@ -84,6 +112,7 @@
   <div id="root"></div>
 
   <script type="text/babel" src="Scene.jsx"></script>
+  <script type="text/babel" src="app/Background.jsx"></script>
   <script type="text/babel" src="Header.jsx"></script>
   <script type="text/babel" src="Hero.jsx"></script>
   <script type="text/babel" src="Results.jsx"></script>
@@ -92,19 +121,53 @@
     const { useState } = React;
 
     function App() {
-      const [query, setQuery] = useState({ city: "almere", airport: "AMS", pax: "sedan" });
+      const [origin, setOrigin] = useState(null);
+      const [destination, setDestination] = useState(null);
+      const [pax, setPax] = useState("sedan");
+      const [raw, setRaw] = useState([]);
+      const [busy, setBusy] = useState(false);
+      const [summary, setSummary] = useState(null);
 
-      const pickAirport = (code) => {
-        setQuery((q) => ({ ...q, airport: code }));
+      function compare() {
+        if (!origin || !destination) return;
+        setBusy(true); setRaw([]);
+        setTimeout(() => {
+          const m = window.Geo.metrics(origin, destination);
+          const trip = {
+            origin, destination,
+            originCity: origin.city, destinationCity: destination.city,
+            distanceKm: m.km, durationMinutes: m.minutes,
+          };
+          let qs = window.quotesFor(trip, new Date());
+          if (pax === "van") {
+            qs = qs.map((q) => {
+              const f = q.provider === "TaxiGeld" ? 1.2 : (q.provider === "Lokale taxi" ? 1.4 : 1.5);
+              return { ...q, price: Math.round(q.price * f), note: null };
+            }).sort((a, b) => a.price - b.price);
+          }
+          setRaw(qs);
+          setSummary(`${m.km.toFixed(1)} km · ±${m.minutes} min rijden (schatting)`);
+          setBusy(false);
+          if (navigator.vibrate) navigator.vibrate(10);
+          const el = document.getElementById("uitkomst");
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }, 420);
+      }
+
+      function pickAirport(place) {
+        setDestination(place);
         document.getElementById("vergelijk").scrollIntoView({ behavior: "smooth" });
-      };
+      }
 
       return (
         <React.Fragment>
+          <TrafficBackground />
           <Header />
-          <Hero query={query} onSubmit={setQuery} />
-          <Results query={query} />
-          <AirportsGrid active={query.airport} onPick={pickAirport} />
+          <Hero origin={origin} destination={destination} pax={pax}
+                setOrigin={setOrigin} setDestination={setDestination} setPax={setPax}
+                onCompare={compare} busy={busy} />
+          <Results raw={raw} origin={origin} destination={destination} summary={summary} />
+          <AirportsGrid onPick={pickAirport} />
           <WhyCards />
           <CtaBand />
           <Footer />
