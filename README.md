@@ -1,37 +1,58 @@
-# LuchthaventaxiVergelijken 🛫
+# TaxiGeld — taxi vergelijken (React web app) 🌍🚕
 
-Statische website om **luchthaventaxi-prijzen** te vergelijken vanaf Almere en omgeving naar
-Schiphol, Eindhoven, Rotterdam, Lelystad, Düsseldorf, Weeze, Brussel en Charleroi.
-Vaste prijzen vergelijken met Uber/Bolt-schattingen en in één klik boeken via Airportservice Almere.
+Een **coole React-website** die taxiprijzen vergelijkt — **TaxiGeld, Uber, Bolt en lokale taxi** —
+voor **elke route** en **elk vertrekmoment**, met de **echte prijslogica van de TaxiGeld-app**
+1:1 naar JavaScript geport.
 
-## Structuur
-```
-.
-├─ index.html              # de pagina
-├─ assets/
-│  ├─ style.css            # styling
-│  ├─ app.js               # prijzen + rekenlogica (pas tarieven hier aan)
-│  └─ favicon.svg
-├─ robots.txt
-└─ .github/workflows/deploy.yml   # auto-deploy naar GitHub Pages bij elke push
-```
+> Werkt vanaf **elke locatie** (niet alleen Almere). Typ een vertrek- en bestemmingsadres,
+> kies wanneer, en vergelijk.
 
-## Tarieven aanpassen
-Alle prijzen staan bovenin [`assets/app.js`](assets/app.js):
-- `SCHIPHOL_FIXED` — de **vaste** Schiphol-tarieven per stad (taxi + minibus).
-- `AIRPORTS` / `CITIES` — luchthavens en servicesteden (met coördinaten).
-- Overige luchthavens krijgen automatisch een **richtprijs** (afstand × tarief) tot je ze vastlegt.
+## ✨ Wat het doet
+1. **Vertrekpunt / Waar naartoe?** → zoekscherm met directe suggesties (NL-dataset + live
+   OpenStreetMap waar mogelijk).
+2. **Voor wanneer?** (datum/tijd of snelle keuze) → bepaalt de **drukte-toeslag** op Uber/Bolt.
+3. **Vergelijk prijzen** → de **wereldbol duikt in**, prijzen worden berekend, kaarten verschijnen
+   (goedkoopste eerst, met 🥇🥈🥉 en "bespaar €X").
+4. Sorteer (Goedkoopst / Snelst / Best beoordeeld); **Boeken/Openen** opent de juiste app/site
+   (TaxiGeld → airportservicealmere.nl, Uber deep-link, Bolt).
 
-## Automatisch online (GitHub Pages)
-Bij elke push naar `main` draait de workflow en zet de site live.
+## 🎨 De "super cool" extra's
+- **DotGlobe** ([Globe.jsx](Globe.jsx)) — een draaiende canvas-bol van groene stippen met
+  gloeiende route-bogen; draait sneller tijdens een vergelijking.
+- **TrafficBackground** ([Background.jsx](Background.jsx)) — een levende straat (auto's, bussen,
+  trams, fietsen, bomen, huizen, mensen) die **versnelt als je scrollt** en **een inzoomende
+  auto + rimpel spawnt waar je tikt**.
 
-**Eenmalig instellen:** repo → **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-De site komt dan op `https://gbict48-lang.github.io/luchthaventaxivergelijken/`.
+## 🗂 Bestanden
+| Bestand | Rol |
+|---|---|
+| `index.html` | App-shell + React-state (route, tijd, sortering, resultaten). |
+| `app.css` + `colors_and_type.css` | Donker thema + alle styling/design-tokens. |
+| `data.js` | **Prijslogica** (Tariff, Surge, providers, MyTaxi-onderbieding, SchipholPricing, Geo, `quotesFor`). |
+| `places.js` | NL/luchthaven-plaatsen + `searchPlaces()` (lokaal + live OSM/Nominatim). |
+| `Globe.jsx` · `Background.jsx` · `Compare.jsx` · `Icon.jsx` | UI-componenten. |
 
-### Eigen domein koppelen (bijv. luchthaventaxivergelijken.nl)
-1. Repo → **Settings → Pages → Custom domain** → vul je domein in (maakt een `CNAME`-bestand).
-2. Bij je domeinprovider (Vimexx) een **CNAME**-record naar `gbict48-lang.github.io`
-   (of A-records naar GitHub's Pages-IP's voor het hoofddomein).
+## 💶 Tarieven aanpassen
+Alle prijslogica staat in [`data.js`](data.js): vaste **Schiphol-tarieven** per stad,
+de 0,93-onderbieding, Uber/Bolt-tarieven en de drukte-toeslag.
+
+## 🚀 Online (geen build nodig)
+React + Babel + Lucide komen van een CDN; `.jsx` wordt in de browser getranspileerd — dus de map
+kan direct als statische site draaien.
+
+**Auto-deploy:** bij elke push naar `main` zet [deploy.yml](.github/workflows/deploy.yml) de site
+live op **GitHub Pages**.
+
+**Eenmalig instellen:** repo → **Settings → Pages → Source: GitHub Actions**.
+Live op: `https://gbict48-lang.github.io/luchthaventaxivergelijken/`
+
+### Eigen domein
+Settings → Pages → **Custom domain** (bijv. `luchthaventaxivergelijken.nl`), en bij Vimexx een
+**CNAME** naar `gbict48-lang.github.io`.
 
 ## Lokaal bekijken
-Open gewoon `index.html` in je browser — geen build nodig.
+Open `index.html` in je browser (gebruik eventueel een lokale server zodat de `.jsx`-bestanden
+laden, bv. `python -m http.server`).
+
+---
+Uber/Bolt-prijzen zijn **gelabelde schattingen** (geen officiële API), exact zoals de app het stelt.

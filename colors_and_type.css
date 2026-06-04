@@ -1,0 +1,201 @@
+/* ============================================================================
+   LuchthaventaxiVergelijken — Design Tokens: Colors & Type
+   ----------------------------------------------------------------------------
+   Source of truth: the live static site (assets/style.css) of
+   gbict48-lang/luchthaventaxivergelijken.
+   The live site uses a native system font stack. We add Plus Jakarta Sans as
+   an optional brand display/UI font (nearest Google Fonts match) — see
+   README "If you are missing font files". Swap back to the system stack to
+   match the production site exactly.
+   ============================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800&display=swap');
+
+:root {
+  /* ---- BRAND COLORS ---------------------------------------------------- */
+  --green:         #0a7d3f;   /* primary brand green — CTAs, links, accents  */
+  --green-bright:  #00c764;   /* bright lime-green — gradients, highlights   */
+  --green-deep:    #073018;   /* deep forest — hero/CTA gradient floor       */
+  --green-mid:     #0a3d24;   /* mid forest — hero gradient ceiling          */
+  --accent-mint:   #9cffc7;   /* mint accent — headline highlight on dark    */
+
+  /* ---- INK / NEUTRALS -------------------------------------------------- */
+  --ink:           #0e1726;   /* primary text + dark footer ground           */
+  --muted:         #5b6675;   /* secondary text, labels, sub-copy            */
+  --bg:            #f5f7fa;   /* app background (cool off-white)              */
+  --card:          #ffffff;   /* surfaces / cards                            */
+  --line:          #e6e9ef;   /* hairline borders, dividers                  */
+
+  /* ---- TINTS (derived) ------------------------------------------------- */
+  --green-wash:    #eef6f0;   /* pale green chip / icon tile background       */
+  --gray-chip:     #eef0f3;   /* neutral chip background                      */
+  --footer-line:   #1d2840;   /* divider on dark footer                       */
+  --footer-muted:  #8c97a8;   /* muted text on dark footer                    */
+
+  /* ---- SEMANTIC -------------------------------------------------------- */
+  --fg-1:          var(--ink);
+  --fg-2:          var(--muted);
+  --fg-on-dark:    #ffffff;
+  --fg-on-dark-2:  #dff5e8;    /* soft mint-white lead copy on hero           */
+  --link:          var(--green);
+  --focus-ring:    var(--green-bright);
+  --success:       var(--green-bright);
+
+  /* ---- BRAND GRADIENTS ------------------------------------------------- */
+  --grad-brand:    linear-gradient(135deg, var(--green-bright), var(--green));
+  --grad-hero:     linear-gradient(135deg, #0a3d24 0%, #0a7d3f 55%, #073018 100%);
+  --grad-hero-glow: radial-gradient(1200px 500px at 80% -10%, rgba(0,199,100,.35), transparent 60%);
+  --grad-cta:      linear-gradient(135deg, #0a7d3f, #073018);
+
+  /* ---- TYPE FAMILIES --------------------------------------------------- */
+  --font-brand: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-ui: var(--font-brand);
+
+  /* ---- TYPE SCALE (matches live site) ---------------------------------- */
+  --fs-display: clamp(30px, 5vw, 48px); /* hero h1                          */
+  --fs-h2:      26px;                    /* section titles                   */
+  --fs-h3:      17px;                    /* card titles                      */
+  --fs-lead:    18px;                    /* hero lead paragraph              */
+  --fs-body:    16px;                    /* form controls, base             */
+  --fs-sm:      14px;                    /* card body, footer               */
+  --fs-xs:      13px;                    /* labels, sub-copy                 */
+  --fs-2xs:     12px;                    /* disclaimers                      */
+  --fs-price:   22px;                    /* result amounts                   */
+
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold:600;
+  --fw-bold:    700;
+  --fw-heavy:   800;
+
+  --lh-tight:   1.08;   /* display headlines                                 */
+  --lh-snug:    1.3;
+  --lh-body:    1.55;   /* body copy                                         */
+  --tracking-tight: -0.5px; /* display headlines                            */
+
+  /* ---- RADII ----------------------------------------------------------- */
+  --r-pill:   999px;
+  --r-card:   18px;   /* primary card radius                                 */
+  --r-result: 16px;
+  --r-input:  12px;
+  --r-btn:    14px;
+  --r-tile:   10px;   /* logo badge / icon tiles                             */
+
+  /* ---- ELEVATION ------------------------------------------------------- */
+  --shadow-card:  0 10px 30px rgba(16,23,38,.08);
+  --shadow-best:  0 12px 30px rgba(0,199,100,.18);
+  --shadow-btn:   0 8px 20px rgba(10,125,63,.35);
+
+  /* ---- SPACING (8pt-ish, as used) -------------------------------------- */
+  --sp-1: 6px;
+  --sp-2: 10px;
+  --sp-3: 14px;
+  --sp-4: 20px;
+  --sp-5: 26px;
+  --sp-6: 40px;
+  --sp-7: 64px;
+
+  --container: 1100px;
+}
+
+/* ============================================================================
+   SEMANTIC TYPE PRESETS — apply directly or use as reference
+   ============================================================================ */
+.ds-display {
+  font-family: var(--font-brand);
+  font-size: var(--fs-display);
+  font-weight: var(--fw-heavy);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+}
+.ds-h2 {
+  font-family: var(--font-brand);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-heavy);
+  line-height: var(--lh-snug);
+}
+.ds-h3 {
+  font-family: var(--font-brand);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+}
+.ds-lead {
+  font-family: var(--font-brand);
+  font-size: var(--fs-lead);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-body);
+}
+.ds-body {
+  font-family: var(--font-brand);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-body);
+}
+.ds-label {
+  font-family: var(--font-brand);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--muted);
+}
+.ds-disclaimer {
+  font-family: var(--font-brand);
+  font-size: var(--fs-2xs);
+  color: var(--muted);
+}
+
+/* ============================================================================
+   TAXIGELD — APP / WEB-APP THEME (dark)
+   ----------------------------------------------------------------------------
+   Source of truth: the native iOS app TaxiGeld (Features/Theme/Theme.swift).
+   A strak, donker, modern surface — the second product surface in this system.
+   The marketing site (above) is light-green; the TaxiGeld app + its web build
+   (ui_kits/taxigeld-app) use these dark tokens. Hex values are exact ports of
+   the SwiftUI Color(red:green:blue:) definitions.
+   ============================================================================ */
+:root {
+  /* surfaces (near-black → elevated) */
+  --tg-bg:          #0d0f14;   /* app background           rgb(.05 .06 .08) */
+  --tg-surface:     #1a1c24;   /* card surface             rgb(.10 .11 .14) */
+  --tg-surface-2:   #242630;   /* elevated surface         rgb(.14 .15 .19) */
+  --tg-bg-grad:     radial-gradient(1100px 620px at 70% -8%, rgba(0,217,117,.14), transparent 60%), #0d0f14;
+
+  /* brand + accents */
+  --tg-brand:       #00d975;   /* TaxiGeld green           rgb(.00 .85 .46) */
+  --tg-brand-dim:   #00a85a;
+  --tg-accent:      #5c8cff;   /* blue (origin dot)        rgb(.36 .55 1.0) */
+  --tg-warning:     #ffb833;   /* surge / amber            rgb(1.0 .72 .20) */
+
+  /* provider tints */
+  --tg-uber:        #f2f2f4;   /* near-white (Color.primary on dark) */
+  --tg-bolt:        #33bd8c;   /* Bolt teal-green          rgb(.20 .74 .55) */
+  --tg-local:       #f29c12;   /* lokale taxi amber        rgb(.95 .61 .07) */
+  --tg-star:        #ffd24a;
+
+  /* text on dark */
+  --tg-text:        #ffffff;
+  --tg-text-2:      rgba(255,255,255,.60);
+  --tg-text-3:      rgba(255,255,255,.38);
+  --tg-hairline:    rgba(255,255,255,.08);
+
+  /* radii (app uses 18 for cards/buttons, 16 results, 28 hero) */
+  --tg-r-hero:   28px;
+  --tg-r-card:   18px;
+  --tg-r-result: 16px;
+  --tg-r-field:  16px;
+  --tg-r-pill:   999px;
+
+  /* elevation — green glow on the cheapest / primary, soft black otherwise */
+  --tg-shadow-card:  0 10px 30px rgba(0,0,0,.35);
+  --tg-shadow-glow:  0 12px 30px rgba(0,217,117,.22);
+  --tg-shadow-btn:   0 8px 22px rgba(0,217,117,.40);
+  --tg-shadow-hero:  0 14px 40px rgba(0,217,117,.28);
+}
+
+/* Apply to a root container to opt a tree into the dark app theme. */
+.theme-taxigeld {
+  background: var(--tg-bg);
+  color: var(--tg-text);
+  font-family: var(--font-ui);
+}

@@ -2,138 +2,147 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Luchthaventaxi vergelijken — vaste prijs naar Schiphol, Eindhoven, Düsseldorf & meer</title>
-  <meta name="description" content="Vergelijk direct de vaste prijs van een luchthaventaxi vanaf Almere en omgeving naar Schiphol, Eindhoven, Rotterdam, Düsseldorf, Weeze, Brussel en Charleroi. Altijd de scherpste prijs — boek in één klik." />
-  <meta name="theme-color" content="#0a7d3f" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover" />
+  <title>TaxiGeld — vergelijk taxiritten</title>
+  <meta name="theme-color" content="#0d0f14" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="app.css" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script src="data.js"></script>
+  <script src="places.js"></script>
 </head>
 <body>
-  <header class="site-header">
-    <a class="logo" href="/">
-      <span class="logo-badge">✈︎€</span>
-      <span class="logo-text">Luchthaventaxi<strong>Vergelijken</strong></span>
-    </a>
-    <nav class="nav">
-      <a href="#vergelijk">Vergelijk</a>
-      <a href="#luchthavens">Luchthavens</a>
-      <a href="#waarom">Waarom wij</a>
-      <a class="nav-cta" href="tel:0362222222">📞 036&nbsp;2222222</a>
-    </nav>
-  </header>
+  <div id="root"></div>
 
-  <!-- HERO + REKENTOOL -->
-  <section class="hero" id="vergelijk">
-    <div class="hero-bg" aria-hidden="true"></div>
-    <div class="hero-inner">
-      <div class="hero-copy">
-        <h1>De goedkoopste <span class="accent">luchthaventaxi</span> vanaf Almere</h1>
-        <p class="lead">Vergelijk in 5 seconden de vaste prijs naar elke luchthaven — en boek met een vaste chauffeur, zonder verrassingen.</p>
-        <ul class="hero-points">
-          <li>✅ Vaste prijs, geen taximeter</li>
-          <li>✅ 24/7 · vaste chauffeur</li>
-          <li>✅ Van én naar de luchthaven</li>
-        </ul>
-      </div>
+  <script type="text/babel" src="Icon.jsx"></script>
+  <script type="text/babel" src="Globe.jsx"></script>
+  <script type="text/babel" src="Background.jsx"></script>
+  <script type="text/babel" src="Compare.jsx"></script>
+  <script type="text/babel">
+    const { useState, useMemo } = React;
 
-      <div class="calc card">
-        <h2 class="calc-title">Bereken je vaste prijs</h2>
-        <form id="fareForm">
-          <label class="field">
-            <span>Vertrek / bestemming (plaats)</span>
-            <select id="city" required></select>
-          </label>
-          <label class="field">
-            <span>Luchthaven</span>
-            <select id="airport" required></select>
-          </label>
-          <label class="field">
-            <span>Aantal personen</span>
-            <select id="pax">
-              <option value="sedan">1–4 personen (taxi)</option>
-              <option value="van">5–8 personen (minibus)</option>
-            </select>
-          </label>
-          <button class="btn-primary" type="submit">Vergelijk prijzen</button>
-        </form>
-      </div>
-    </div>
-  </section>
+    function App() {
+      const [origin, setOrigin] = useState(null);
+      const [destination, setDestination] = useState(null);
+      const [when, setWhen] = useState(null);          // null = nu
+      const [editing, setEditing] = useState(null);     // 'origin' | 'destination'
+      const [loading, setLoading] = useState(false);
+      const [raw, setRaw] = useState([]);
+      const [summary, setSummary] = useState(null);
+      const [sortOption, setSort] = useState("cheapest");
+      const [spin, setSpin] = useState(1);
 
-  <!-- RESULTATEN -->
-  <section class="results-wrap">
-    <div class="container">
-      <div id="resultsMeta" class="results-meta"></div>
-      <div id="results" class="results"></div>
-      <p class="disclaimer" id="disclaimer"></p>
-    </div>
-  </section>
+      const canCompare = origin && destination && !loading;
 
-  <!-- LUCHTHAVENS -->
-  <section class="airports" id="luchthavens">
-    <div class="container">
-      <h2 class="section-title">Wij rijden naar alle grote luchthavens</h2>
-      <div class="airport-grid" id="airportGrid"></div>
-    </div>
-  </section>
+      const quotes = useMemo(() => {
+        const q = raw.slice();
+        if (sortOption === "cheapest") q.sort((a, b) => a.price - b.price);
+        else if (sortOption === "fastest") q.sort((a, b) => a.pickupEtaMinutes - b.pickupEtaMinutes);
+        else q.sort((a, b) => b.rating - a.rating);
+        return q;
+      }, [raw, sortOption]);
 
-  <!-- WAAROM -->
-  <section class="why" id="waarom">
-    <div class="container">
-      <h2 class="section-title">Waarom via ons boeken?</h2>
-      <div class="why-grid">
-        <div class="why-card"><div class="why-ico">💶</div><h3>Vaste prijs</h3><p>Vooraf bekend, geen taximeter, geen nacht- of bagagetoeslag.</p></div>
-        <div class="why-card"><div class="why-ico">🕒</div><h3>Altijd op tijd</h3><p>We houden je vluchttijd in de gaten en staan klaar wanneer je landt.</p></div>
-        <div class="why-card"><div class="why-ico">👨‍✈️</div><h3>Vaste chauffeurs</h3><p>Ervaren, vriendelijke chauffeurs die de weg kennen.</p></div>
-        <div class="why-card"><div class="why-ico">🚐</div><h3>Taxi of minibus</h3><p>Van 1 tot 8 personen, met ruimte voor al je bagage.</p></div>
-      </div>
-    </div>
-  </section>
+      const prices = raw.map((q) => q.price);
+      const maxPrice = prices.length ? Math.max(...prices) : 0;
+      const minPrice = prices.length ? Math.min(...prices) : 0;
+      const cheapestId = raw.length ? raw.reduce((m, q) => q.price < m.price ? q : m).provider : null;
+      const priceRank = (q) => raw.slice().sort((a, b) => a.price - b.price).findIndex((x) => x.provider === q.provider) + 1;
 
-  <!-- CTA -->
-  <section class="cta-band">
-    <div class="container cta-inner">
-      <div>
-        <h2>Klaar om te boeken?</h2>
-        <p>Reserveer minimaal 1 uur vooraf voor de vaste prijs.</p>
-      </div>
-      <div class="cta-actions">
-        <a class="btn-primary" href="https://www.airportservicealmere.nl/" target="_blank" rel="noopener">Boek online</a>
-        <a class="btn-ghost" href="tel:0362222222">📞 036 2222222</a>
-      </div>
-    </div>
-  </section>
+      function swap() { setOrigin(destination); setDestination(origin); setRaw([]); setSummary(null); }
 
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div>
-        <div class="logo"><span class="logo-badge">✈︎€</span><span class="logo-text">Luchthaventaxi<strong>Vergelijken</strong></span></div>
-        <p class="muted">Vaste prijzen voor luchthavenvervoer vanuit Almere, het Gooi en Flevoland.</p>
-      </div>
-      <div>
-        <h4>Populair</h4>
-        <ul class="muted">
-          <li>Taxi Almere → Schiphol</li>
-          <li>Taxi Almere → Eindhoven</li>
-          <li>Taxi Almere → Düsseldorf</li>
-          <li>Taxi naar Schiphol boeken</li>
-        </ul>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <ul class="muted">
-          <li>📞 <a href="tel:0362222222">036 2222222</a></li>
-          <li>🌐 <a href="https://www.airportservicealmere.nl/" target="_blank" rel="noopener">airportservicealmere.nl</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="container sub">
-      <p class="muted">Prijzen voor Schiphol zijn vaste tarieven. Prijzen voor overige luchthavens en die van Uber/Bolt zijn richtprijzen ter vergelijking.</p>
-      <p class="muted">© <span id="year"></span> LuchthaventaxiVergelijken</p>
-    </div>
-  </footer>
+      function compare() {
+        if (!canCompare) return;
+        setLoading(true); setRaw([]); setSummary(null);
+        setSpin(7); setTimeout(() => setSpin(1.6), 2600);
+        const date = when || new Date();
+        // tiny delay so the spinner + globe dive read as "working"
+        setTimeout(() => {
+          const m = window.Geo.metrics(origin, destination);
+          const trip = {
+            origin, destination,
+            originCity: origin.city, destinationCity: destination.city,
+            distanceKm: m.km, durationMinutes: m.minutes,
+          };
+          const qs = window.quotesFor(trip, date);
+          setRaw(qs);
+          setSummary(`${m.km.toFixed(1)} km · ±${m.minutes} min rijden (schatting)`);
+          setLoading(false);
+          if (window.navigator.vibrate) window.navigator.vibrate(12);
+        }, 650);
+      }
 
-  <script src="assets/app.js"></script>
+      function act(quote) { window.Booking.open(quote.provider, origin, destination); }
+
+      return (
+        <React.Fragment>
+          <TrafficBackground />
+          <div className="app">
+            <div className="topbar">
+              <div className="brandmark"><span className="badge">€</span>TaxiGeld</div>
+              <a className="call" href="tel:0362222222"><Icon name="phone" size={14} />036 2222222</a>
+            </div>
+
+            <div className="hero">
+              <DotGlobe spin={spin} />
+              <div className="hero-text">
+                <h1>TaxiGeld</h1>
+                <p>{raw.length ? "Je rit, scherp geprijsd ✨" : "Vergelijk de wereld rond 🌍"}</p>
+              </div>
+            </div>
+
+            <RouteCard origin={origin} destination={destination}
+                       onEdit={setEditing} onSwap={swap} />
+            <WhenField value={when} onChange={setWhen} />
+
+            <button className="btn-primary" disabled={!canCompare} onClick={compare}>
+              {loading
+                ? <React.Fragment><span className="spinner"></span>Prijzen ophalen…</React.Fragment>
+                : <React.Fragment><Icon name="search" size={18} stroke={2.4} />Vergelijk prijzen</React.Fragment>}
+            </button>
+
+            {summary && (
+              <div className="trip-summary"><Icon name="route" size={15} />{summary}</div>
+            )}
+
+            {raw.length > 0 && (
+              <React.Fragment>
+                <SortPicker value={sortOption} onChange={setSort} />
+                <div className="results-head">
+                  <span className="save">{maxPrice - minPrice >= 1 ? "💸 Bespaar tot " + window.euro(maxPrice - minPrice) : (raw.length + " opties")}</span>
+                  <span className="count">{raw.length} opties</span>
+                </div>
+                <div className="results">
+                  {quotes.map((q) => (
+                    <ResultCard key={q.provider} quote={q}
+                                cheapest={q.provider === cheapestId}
+                                rank={priceRank(q)}
+                                savings={maxPrice - q.price}
+                                onAction={() => act(q)} />
+                  ))}
+                </div>
+              </React.Fragment>
+            )}
+
+            <p className="disclaimer">
+              Uber &amp; Bolt zijn gelabelde schattingen (geen officiële koppeling) op basis van afstand × tijd × drukte.
+              TaxiGeld &amp; lokale taxi tonen vaste of geregelde tarieven. Prijzen zijn indicatief.
+            </p>
+          </div>
+
+          {editing && (
+            <LocationSearch
+              title={editing === "origin" ? "Vertrekpunt" : "Bestemming"}
+              onPick={editing === "origin" ? setOrigin : setDestination}
+              onClose={() => setEditing(null)} />
+          )}
+        </React.Fragment>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
 </body>
 </html>
