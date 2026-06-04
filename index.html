@@ -2,142 +2,112 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover" />
-  <title>TaxiGeld — vergelijk taxiritten</title>
-  <meta name="theme-color" content="#0d0f14" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primaire SEO -->
+  <title>Luchthaventaxi vergelijken — vaste prijs naar Schiphol, Eindhoven & Düsseldorf | v.a. €55</title>
+  <meta name="description" content="Vergelijk direct de vaste prijs van een luchthaventaxi vanaf Almere, het Gooi en Flevoland naar Schiphol, Eindhoven, Rotterdam, Lelystad, Düsseldorf, Weeze, Brussel en Charleroi. Geen taximeter, vaste chauffeur, 24/7 — boek in één klik." />
+  <meta name="keywords" content="luchthaventaxi vergelijken, taxi naar Schiphol, schiphol taxi Almere, taxi naar Schiphol boeken, taxi naar Schiphol bestellen, taxi Almere Schiphol vaste prijs, taxi Eindhoven Airport, taxi Düsseldorf, luchthavenvervoer Almere, vliegveldtaxi Gooi" />
+  <link rel="canonical" href="https://luchthaventaxivergelijken.nl/" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="theme-color" content="#0a7d3f" />
+  <meta name="author" content="Airportservice Almere" />
+  <meta name="geo.region" content="NL-FL" />
+  <meta name="geo.placename" content="Almere" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="nl_NL" />
+  <meta property="og:site_name" content="LuchthaventaxiVergelijken" />
+  <meta property="og:title" content="Luchthaventaxi vergelijken — vaste prijs naar Schiphol & meer" />
+  <meta property="og:description" content="De goedkoopste luchthaventaxi vanaf Almere e.o. Vaste prijs, geen taximeter, 24/7. Vergelijk en boek in één klik." />
+  <meta property="og:url" content="https://luchthaventaxivergelijken.nl/" />
+  <meta property="og:image" content="https://luchthaventaxivergelijken.nl/assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Luchthaventaxi vergelijken — vaste prijs naar Schiphol & meer" />
+  <meta name="twitter:description" content="De goedkoopste luchthaventaxi vanaf Almere e.o. Vaste prijs, geen taximeter, 24/7." />
+  <meta name="twitter:image" content="https://luchthaventaxivergelijken.nl/assets/og.png" />
+
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="app.css" />
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="kit.css" />
+
+  <!-- Gestructureerde data: dienst + veelgestelde vragen (rich results) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TaxiService",
+    "name": "LuchthaventaxiVergelijken — Airportservice Almere",
+    "url": "https://luchthaventaxivergelijken.nl/",
+    "image": "https://luchthaventaxivergelijken.nl/assets/og.png",
+    "telephone": "+31362222222",
+    "priceRange": "€€",
+    "areaServed": ["Almere","Blaricum","Bussum","Eemnes","Huizen","Laren","Lelystad","Muiden","Naarden","Weesp","Zeewolde","Het Gooi","Flevoland"],
+    "provider": { "@type": "LocalBusiness", "name": "Airportservice Almere", "telephone": "+31362222222", "url": "https://www.airportservicealmere.nl/" },
+    "serviceType": "Luchthavenvervoer / airport taxi",
+    "availableChannel": { "@type": "ServiceChannel", "serviceUrl": "https://www.airportservicealmere.nl/" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Wat kost een taxi van Almere naar Schiphol?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Een taxi van Almere naar Schiphol kost een vaste prijs van €65 (1–4 personen) of €80 met de minibus (5–8 personen). Geen taximeter, geen nacht- of bagagetoeslag." } },
+      { "@type": "Question", "name": "Kan ik een taxi naar Schiphol vooraf boeken?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Ja. Reserveer minimaal 1 uur vooraf voor de vaste prijs. Je krijgt een vaste chauffeur die je vluchttijd in de gaten houdt." } },
+      { "@type": "Question", "name": "Naar welke luchthavens rijden jullie?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Schiphol, Eindhoven Airport, Rotterdam The Hague, Lelystad Airport, Düsseldorf, Weeze (Niederrhein), Brussels Airport en Charleroi — zowel naar als vanaf de luchthaven." } },
+      { "@type": "Question", "name": "Is de luchthaventaxi goedkoper dan Uber of Bolt?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Voor luchthavenritten meestal wel: wij werken met een vaste prijs zonder drukte-toeslag, terwijl Uber en Bolt met een variabele meter en surge werken." } }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
   <script src="data.js"></script>
-  <script src="places.js"></script>
 </head>
-<body>
+<body id="top">
+  <!-- Toegankelijke, crawlbare kop voordat React laadt -->
+  <noscript>
+    <h1>Luchthaventaxi vergelijken — vaste prijs naar Schiphol, Eindhoven en Düsseldorf</h1>
+    <p>Vaste prijzen voor luchthavenvervoer vanaf Almere, het Gooi en Flevoland. Bel 036 2222222 of boek op airportservicealmere.nl.</p>
+  </noscript>
+
   <div id="root"></div>
 
-  <script type="text/babel" src="Icon.jsx"></script>
-  <script type="text/babel" src="Globe.jsx"></script>
-  <script type="text/babel" src="Background.jsx"></script>
-  <script type="text/babel" src="Compare.jsx"></script>
+  <script type="text/babel" src="Scene.jsx"></script>
+  <script type="text/babel" src="Header.jsx"></script>
+  <script type="text/babel" src="Hero.jsx"></script>
+  <script type="text/babel" src="Results.jsx"></script>
+  <script type="text/babel" src="Sections.jsx"></script>
   <script type="text/babel">
-    const { useState, useMemo } = React;
+    const { useState } = React;
 
     function App() {
-      const [origin, setOrigin] = useState(null);
-      const [destination, setDestination] = useState(null);
-      const [when, setWhen] = useState(null);          // null = nu
-      const [editing, setEditing] = useState(null);     // 'origin' | 'destination'
-      const [loading, setLoading] = useState(false);
-      const [raw, setRaw] = useState([]);
-      const [summary, setSummary] = useState(null);
-      const [sortOption, setSort] = useState("cheapest");
-      const [spin, setSpin] = useState(1);
+      const [query, setQuery] = useState({ city: "almere", airport: "AMS", pax: "sedan" });
 
-      const canCompare = origin && destination && !loading;
-
-      const quotes = useMemo(() => {
-        const q = raw.slice();
-        if (sortOption === "cheapest") q.sort((a, b) => a.price - b.price);
-        else if (sortOption === "fastest") q.sort((a, b) => a.pickupEtaMinutes - b.pickupEtaMinutes);
-        else q.sort((a, b) => b.rating - a.rating);
-        return q;
-      }, [raw, sortOption]);
-
-      const prices = raw.map((q) => q.price);
-      const maxPrice = prices.length ? Math.max(...prices) : 0;
-      const minPrice = prices.length ? Math.min(...prices) : 0;
-      const cheapestId = raw.length ? raw.reduce((m, q) => q.price < m.price ? q : m).provider : null;
-      const priceRank = (q) => raw.slice().sort((a, b) => a.price - b.price).findIndex((x) => x.provider === q.provider) + 1;
-
-      function swap() { setOrigin(destination); setDestination(origin); setRaw([]); setSummary(null); }
-
-      function compare() {
-        if (!canCompare) return;
-        setLoading(true); setRaw([]); setSummary(null);
-        setSpin(7); setTimeout(() => setSpin(1.6), 2600);
-        const date = when || new Date();
-        // tiny delay so the spinner + globe dive read as "working"
-        setTimeout(() => {
-          const m = window.Geo.metrics(origin, destination);
-          const trip = {
-            origin, destination,
-            originCity: origin.city, destinationCity: destination.city,
-            distanceKm: m.km, durationMinutes: m.minutes,
-          };
-          const qs = window.quotesFor(trip, date);
-          setRaw(qs);
-          setSummary(`${m.km.toFixed(1)} km · ±${m.minutes} min rijden (schatting)`);
-          setLoading(false);
-          if (window.navigator.vibrate) window.navigator.vibrate(12);
-        }, 650);
-      }
-
-      function act(quote) { window.Booking.open(quote.provider, origin, destination); }
+      const pickAirport = (code) => {
+        setQuery((q) => ({ ...q, airport: code }));
+        document.getElementById("vergelijk").scrollIntoView({ behavior: "smooth" });
+      };
 
       return (
         <React.Fragment>
-          <TrafficBackground />
-          <div className="app">
-            <div className="topbar">
-              <div className="brandmark"><span className="badge">€</span>TaxiGeld</div>
-              <a className="call" href="tel:0362222222"><Icon name="phone" size={14} />036 2222222</a>
-            </div>
-
-            <div className="hero">
-              <DotGlobe spin={spin} />
-              <div className="hero-text">
-                <h1>TaxiGeld</h1>
-                <p>{raw.length ? "Je rit, scherp geprijsd ✨" : "Vergelijk de wereld rond 🌍"}</p>
-              </div>
-            </div>
-
-            <RouteCard origin={origin} destination={destination}
-                       onEdit={setEditing} onSwap={swap} />
-            <WhenField value={when} onChange={setWhen} />
-
-            <button className="btn-primary" disabled={!canCompare} onClick={compare}>
-              {loading
-                ? <React.Fragment><span className="spinner"></span>Prijzen ophalen…</React.Fragment>
-                : <React.Fragment><Icon name="search" size={18} stroke={2.4} />Vergelijk prijzen</React.Fragment>}
-            </button>
-
-            {summary && (
-              <div className="trip-summary"><Icon name="route" size={15} />{summary}</div>
-            )}
-
-            {raw.length > 0 && (
-              <React.Fragment>
-                <SortPicker value={sortOption} onChange={setSort} />
-                <div className="results-head">
-                  <span className="save">{maxPrice - minPrice >= 1 ? "💸 Bespaar tot " + window.euro(maxPrice - minPrice) : (raw.length + " opties")}</span>
-                  <span className="count">{raw.length} opties</span>
-                </div>
-                <div className="results">
-                  {quotes.map((q) => (
-                    <ResultCard key={q.provider} quote={q}
-                                cheapest={q.provider === cheapestId}
-                                rank={priceRank(q)}
-                                savings={maxPrice - q.price}
-                                onAction={() => act(q)} />
-                  ))}
-                </div>
-              </React.Fragment>
-            )}
-
-            <p className="disclaimer">
-              Uber &amp; Bolt zijn gelabelde schattingen (geen officiële koppeling) op basis van afstand × tijd × drukte.
-              TaxiGeld &amp; lokale taxi tonen vaste of geregelde tarieven. Prijzen zijn indicatief.
-            </p>
-          </div>
-
-          {editing && (
-            <LocationSearch
-              title={editing === "origin" ? "Vertrekpunt" : "Bestemming"}
-              onPick={editing === "origin" ? setOrigin : setDestination}
-              onClose={() => setEditing(null)} />
-          )}
+          <Header />
+          <Hero query={query} onSubmit={setQuery} />
+          <Results query={query} />
+          <AirportsGrid active={query.airport} onPick={pickAirport} />
+          <WhyCards />
+          <CtaBand />
+          <Footer />
         </React.Fragment>
       );
     }

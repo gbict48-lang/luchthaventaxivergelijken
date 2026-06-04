@@ -1,58 +1,54 @@
-# TaxiGeld — taxi vergelijken (React web app) 🌍🚕
+# LuchthaventaxiVergelijken 🛫 + TaxiGeld-app 🌍
 
-Een **coole React-website** die taxiprijzen vergelijkt — **TaxiGeld, Uber, Bolt en lokale taxi** —
-voor **elke route** en **elk vertrekmoment**, met de **echte prijslogica van de TaxiGeld-app**
-1:1 naar JavaScript geport.
+Twee oppervlakken in één site:
 
-> Werkt vanaf **elke locatie** (niet alleen Almere). Typ een vertrek- en bestemmingsadres,
-> kies wanneer, en vergelijk.
+| URL | Wat | Stijl |
+|---|---|---|
+| **`/`** | **Marketing-landing** — luchthaventaxi vergelijken (Schiphol, Eindhoven, Düsseldorf …), vaste prijzen, boeken. SEO-geoptimaliseerd. | Licht, groen |
+| **`/app/`** | **TaxiGeld-app** — vergelijk élke taxirit (TaxiGeld/Uber/Bolt/lokaal) vanaf elke locatie, met wereldbol, bewegende achtergrond, locatie-autocomplete en "voor wanneer". | Donker |
 
-## ✨ Wat het doet
-1. **Vertrekpunt / Waar naartoe?** → zoekscherm met directe suggesties (NL-dataset + live
-   OpenStreetMap waar mogelijk).
-2. **Voor wanneer?** (datum/tijd of snelle keuze) → bepaalt de **drukte-toeslag** op Uber/Bolt.
-3. **Vergelijk prijzen** → de **wereldbol duikt in**, prijzen worden berekend, kaarten verschijnen
-   (goedkoopste eerst, met 🥇🥈🥉 en "bespaar €X").
-4. Sorteer (Goedkoopst / Snelst / Best beoordeeld); **Boeken/Openen** opent de juiste app/site
-   (TaxiGeld → airportservicealmere.nl, Uber deep-link, Bolt).
+De landing linkt naar de app via **🚕 App** in de navigatie; de app linkt terug via het logo.
 
-## 🎨 De "super cool" extra's
-- **DotGlobe** ([Globe.jsx](Globe.jsx)) — een draaiende canvas-bol van groene stippen met
-  gloeiende route-bogen; draait sneller tijdens een vergelijking.
-- **TrafficBackground** ([Background.jsx](Background.jsx)) — een levende straat (auto's, bussen,
-  trams, fietsen, bomen, huizen, mensen) die **versnelt als je scrollt** en **een inzoomende
-  auto + rimpel spawnt waar je tikt**.
+## Structuur
+```
+/
+├─ index.html              # marketing-landing (React via CDN)
+├─ kit.css                 # landing-styling
+├─ data.js                 # luchthaven-tarieven + compareFares()
+├─ Header/Hero/Results/Sections/Scene.jsx
+├─ colors_and_type.css     # gedeelde design-tokens
+├─ assets/ (favicon.svg, og.png)
+├─ robots.txt · sitemap.xml
+├─ app/                    # de TaxiGeld-app
+│  ├─ index.html · app.css
+│  ├─ data.js · places.js  # prijslogica + locatie-autocomplete
+│  └─ Globe/Background/Compare/Icon.jsx
+└─ .github/workflows/deploy.yml
+```
 
-## 🗂 Bestanden
-| Bestand | Rol |
-|---|---|
-| `index.html` | App-shell + React-state (route, tijd, sortering, resultaten). |
-| `app.css` + `colors_and_type.css` | Donker thema + alle styling/design-tokens. |
-| `data.js` | **Prijslogica** (Tariff, Surge, providers, MyTaxi-onderbieding, SchipholPricing, Geo, `quotesFor`). |
-| `places.js` | NL/luchthaven-plaatsen + `searchPlaces()` (lokaal + live OSM/Nominatim). |
-| `Globe.jsx` · `Background.jsx` · `Compare.jsx` · `Icon.jsx` | UI-componenten. |
+## SEO
+- Volledige `<head>`: title, description, keywords, canonical, Open Graph + Twitter-card (`assets/og.png`).
+- **Gestructureerde data** (JSON-LD): `TaxiService` + `FAQPage` → kans op rich results in Google.
+- `sitemap.xml`, `robots.txt`, `noscript`-kop, semantische content (luchthavens, waarom, FAQ).
 
-## 💶 Tarieven aanpassen
-Alle prijslogica staat in [`data.js`](data.js): vaste **Schiphol-tarieven** per stad,
-de 0,93-onderbieding, Uber/Bolt-tarieven en de drukte-toeslag.
+### Jouw domeinen
+Je hebt o.a. `luchthaventaxivergelijken.nl`, `schipholtaxivergelijken.nl`,
+`taxinaarschipholboeken.nl`, `taxinaarschipholbestellen.nl`, `taxinaarschipholvergelijken.nl`.
+**Aanpak voor Google:** kies **`luchthaventaxivergelijken.nl` als hoofd-domein** (canonical) en laat
+de andere domeinen **301-doorverwijzen** naar dit domein bij Vimexx (zo voorkom je "dubbele content"
+en bundel je alle SEO-kracht op één site). In GitHub Pages stel je het hoofd-domein in onder
+**Settings → Pages → Custom domain**.
 
-## 🚀 Online (geen build nodig)
-React + Babel + Lucide komen van een CDN; `.jsx` wordt in de browser getranspileerd — dus de map
-kan direct als statische site draaien.
+## Snelheid
+React/ReactDOM laden nu als **productie-build** (kleiner/sneller) + `preconnect`. JSX wordt nog in de
+browser getranspileerd (Babel) zodat er geen build-stap nodig is. Voor maximale snelheid kan later een
+**Vite-build** worden toegevoegd (zie hieronder).
 
-**Auto-deploy:** bij elke push naar `main` zet [deploy.yml](.github/workflows/deploy.yml) de site
-live op **GitHub Pages**.
+## Auto-deploy
+Elke push naar `main` → [deploy.yml](.github/workflows/deploy.yml) zet de site live op GitHub Pages.
+Eenmalig: **Settings → Pages → Source: GitHub Actions**.
 
-**Eenmalig instellen:** repo → **Settings → Pages → Source: GitHub Actions**.
-Live op: `https://gbict48-lang.github.io/luchthaventaxivergelijken/`
-
-### Eigen domein
-Settings → Pages → **Custom domain** (bijv. `luchthaventaxivergelijken.nl`), en bij Vimexx een
-**CNAME** naar `gbict48-lang.github.io`.
-
-## Lokaal bekijken
-Open `index.html` in je browser (gebruik eventueel een lokale server zodat de `.jsx`-bestanden
-laden, bv. `python -m http.server`).
-
----
-Uber/Bolt-prijzen zijn **gelabelde schattingen** (geen officiële API), exact zoals de app het stelt.
+## Vite (later)
+Een Vite-build (geen browser-Babel, geminificeerde bundel) maakt de eerste load nóg sneller. Dat vereist
+een ESM-migratie van de componenten en wordt apart getest opgezet (faalt een build, dan blijft de huidige
+live site gewoon staan).

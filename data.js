@@ -1,162 +1,102 @@
 "use strict";
-/* =========================================================================
-   TaxiGeld — pricing engine + place data, ported 1:1 from the iOS app
-   (taxi-geld/TaxiGeld/Services/Pricing/*, Geo/Geo.swift, Models/*).
-   Generic: works for ANY origin/destination, not just Almere.
-   Exposed on window for the React UI kit.
-   ========================================================================= */
+/* Fare data + logic — lifted & lightly trimmed from the production assets/app.js
+   (gbict48-lang/luchthaventaxivergelijken). Exposed on window for the UI kit. */
 
-/* ---- Geo: road distance + duration estimate (Geo.swift) ---------------- */
-const Geo = {
-  roadFactor: 1.30,
-  averageSpeedKmh: 32.0,
-  haversineKm(a, b) {
-    const R = 6371, toRad = (d) => (d * Math.PI) / 180;
-    const dLat = toRad(b.lat - a.lat), dLon = toRad(b.lon - a.lon);
-    const s = Math.sin(dLat / 2) ** 2 +
-              Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLon / 2) ** 2;
-    return 2 * R * Math.asin(Math.sqrt(s));
-  },
-  metrics(a, b) {
-    const straight = Geo.haversineKm(a, b);
-    const km = Math.round(straight * Geo.roadFactor * 10) / 10;
-    const minutes = Math.max(1, Math.round((km / Geo.averageSpeedKmh) * 60));
-    return { km, minutes };
-  },
+const BOOKING_URL = "https://www.airportservicealmere.nl/";
+const PHONE = "0362222222";
+
+const AIRPORTS = {
+  AMS: { name: "Schiphol",            ico: "🛫", lat: 52.3105, lon: 4.7683 },
+  EIN: { name: "Eindhoven Airport",   ico: "✈️", lat: 51.4501, lon: 5.3745 },
+  RTM: { name: "Rotterdam The Hague", ico: "🛩️", lat: 51.9569, lon: 4.4377 },
+  LEY: { name: "Lelystad Airport",    ico: "🛬", lat: 52.4604, lon: 5.5272 },
+  DUS: { name: "Düsseldorf Airport",  ico: "✈️", lat: 51.2895, lon: 6.7668 },
+  NRN: { name: "Weeze / Niederrhein", ico: "✈️", lat: 51.6024, lon: 6.1422 },
+  BRU: { name: "Brussels Airport",    ico: "🛫", lat: 50.9014, lon: 4.4844 },
+  CRL: { name: "Brussels Charleroi",  ico: "✈️", lat: 50.4592, lon: 4.4538 },
 };
 
-/* ---- Tariff (Tariff.swift) --------------------------------------------- */
-function tariffPrice(t, km, minutes) {
-  const raw = t.base + t.perKm * km + t.perMinute * minutes + t.bookingFee;
-  return Math.round(Math.max(t.minimumFare, raw) * 100) / 100;
+const CITIES = {
+  almere:   { name: "Almere",   lat: 52.3508, lon: 5.2647 },
+  blaricum: { name: "Blaricum", lat: 52.2725, lon: 5.2447 },
+  bussum:   { name: "Bussum",   lat: 52.2769, lon: 5.1614 },
+  eemnes:   { name: "Eemnes",   lat: 52.2592, lon: 5.2603 },
+  huizen:   { name: "Huizen",   lat: 52.2992, lon: 5.2414 },
+  laren:    { name: "Laren",    lat: 52.2575, lon: 5.2278 },
+  lelystad: { name: "Lelystad", lat: 52.5185, lon: 5.4714 },
+  muiden:   { name: "Muiden",   lat: 52.3306, lon: 5.0708 },
+  naarden:  { name: "Naarden",  lat: 52.2958, lon: 5.1631 },
+  weesp:    { name: "Weesp",    lat: 52.3083, lon: 5.0417 },
+  zeewolde: { name: "Zeewolde", lat: 52.3306, lon: 5.5417 },
+};
+
+const SCHIPHOL_FIXED = {
+  almere:   { sedan: 65,  van: 80 },
+  blaricum: { sedan: 70,  van: 80 },
+  bussum:   { sedan: 65,  van: 75 },
+  eemnes:   { sedan: 80,  van: 95 },
+  huizen:   { sedan: 70,  van: 80 },
+  laren:    { sedan: 70,  van: 80 },
+  lelystad: { sedan: 100, van: 120 },
+  muiden:   { sedan: 55,  van: 65 },
+  naarden:  { sedan: 60,  van: 70 },
+  weesp:    { sedan: 55,  van: 65 },
+  zeewolde: { sedan: 95,  van: 110 },
+};
+
+function haversineKm(a, b) {
+  const R = 6371, toRad = (d) => (d * Math.PI) / 180;
+  const dLat = toRad(b.lat - a.lat), dLon = toRad(b.lon - a.lon);
+  const s = Math.sin(dLat / 2) ** 2 +
+            Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(s));
 }
+const roadKm = (a, b) => haversineKm(a, b) * 1.25;
+const round5 = (x) => Math.round(x / 5) * 5;
 
-/* ---- Surge (Surge.swift) ----------------------------------------------- */
-function surgeMultiplier(date, sensitivity) {
-  if (sensitivity <= 0) return 1.0;
-  const hour = date.getHours();
-  const weekday = date.getDay(); // 0 = Sunday, 6 = Saturday
-  const isWeekend = weekday === 0 || weekday === 6;
-  let extra = 0.0;
-  if ((hour >= 7 && hour <= 9) || (hour >= 16 && hour <= 19)) extra += 0.25; // spits
-  if (hour >= 23 || hour < 5) extra += isWeekend ? 0.40 : 0.20;              // nacht
-  if (isWeekend && hour >= 20 && hour <= 22) extra += 0.15;                  // uitgaan
-  return 1.0 + extra * sensitivity;
-}
-
-/* ---- Providers (CompetitorProviders.swift + Provider.swift) ------------ */
-const PROVIDERS = {
-  TaxiGeld:     { name: "TaxiGeld",    tagline: "Onze eigen rit — gegarandeerd de scherpste prijs", tint: "var(--tg-brand)", icon: "badge-check", deepLink: false },
-  Uber:         { name: "Uber",        tagline: "Geschatte prijs",            tint: "var(--tg-uber)",  icon: "car-front",   deepLink: true },
-  Bolt:         { name: "Bolt",        tagline: "Geschatte prijs",            tint: "var(--tg-bolt)",  icon: "zap",         deepLink: true },
-  "Lokale taxi":{ name: "Lokale taxi", tagline: "Geregeld maximumtarief",     tint: "var(--tg-local)", icon: "circle-user",  deepLink: false },
-};
-
-const TARIFFS = {
-  uber:  { base: 3.50, perKm: 1.45, perMinute: 0.30, bookingFee: 2.00, minimumFare: 8.50 },
-  bolt:  { base: 2.50, perKm: 1.25, perMinute: 0.25, bookingFee: 1.50, minimumFare: 7.00 },
-  local: { base: 3.96, perKm: 2.50, perMinute: 0.42, bookingFee: 0.00, minimumFare: 12.00 },
-  own:   { base: 2.00, perKm: 1.05, perMinute: 0.22, bookingFee: 0.00, minimumFare: 6.00 },
-};
-
-function estimate(provider, price, etaMinutes, duration, rating, surge, spread) {
-  const rounded = Math.round(price * 100) / 100;
-  return {
-    provider, price: rounded,
-    priceLow: rounded * (1 - spread), priceHigh: rounded * (1 + spread),
-    pickupEtaMinutes: etaMinutes, durationMinutes: duration,
-    rating, surge, isEstimate: true, isBookable: false, note: null,
-  };
-}
-
-/* ---- SchipholPricing (SchipholPricing.swift) --------------------------- */
-const SCHIPHOL = { lat: 52.3105, lon: 4.7683, radiusKm: 6.0 };
-const SCHIPHOL_FARES = {
-  almere:{sedan:65,minibus:80}, blaricum:{sedan:70,minibus:80}, bussum:{sedan:65,minibus:75},
-  eemnes:{sedan:80,minibus:95}, huizen:{sedan:70,minibus:80}, laren:{sedan:70,minibus:80},
-  lelystad:{sedan:100,minibus:120}, muiden:{sedan:55,minibus:65}, naarden:{sedan:60,minibus:70},
-  weesp:{sedan:55,minibus:65}, zeewolde:{sedan:95,minibus:110},
-};
-const isSchiphol = (c) => Geo.haversineKm(c, SCHIPHOL) < SCHIPHOL.radiusKm;
-const servesCity = (city) => {
-  const n = (city || "").toLowerCase();
-  return Object.keys(SCHIPHOL_FARES).some((k) => n.includes(k));
-};
-function schipholFare(trip) {
-  const o = isSchiphol(trip.origin), d = isSchiphol(trip.destination);
-  if (o === d) return null; // exactly one side must be Schiphol
-  const cityRaw = (o ? trip.destinationCity : trip.originCity).toLowerCase();
-  const key = Object.keys(SCHIPHOL_FARES).find((k) => cityRaw.includes(k));
-  return key ? { city: key[0].toUpperCase() + key.slice(1), fare: SCHIPHOL_FARES[key] } : null;
-}
-
-/* ---- MyTaxiProvider (MyTaxiProvider.swift) ----------------------------- */
-const UNDERCUT = 0.93, ABS_MIN = 5.00;
-function myTaxiQuote(trip, competitorMin, date) {
-  const match = schipholFare(trip);
-  if (match) {
-    const price = match.fare.sedan;
-    return {
-      provider: "TaxiGeld", price, priceLow: price, priceHigh: price,
-      pickupEtaMinutes: 0, durationMinutes: trip.durationMinutes, rating: 4.9,
-      surge: 1.0, isEstimate: false, isBookable: true,
-      note: `Vaste prijs · tot 4 pers. · minibus €${Math.round(match.fare.minibus)} (tot 8)`,
-    };
+function ownFare(cityKey, airportCode) {
+  const city = CITIES[cityKey], airport = AIRPORTS[airportCode];
+  if (airportCode === "AMS" && SCHIPHOL_FIXED[cityKey]) {
+    return { ...SCHIPHOL_FIXED[cityKey], fixed: true };
   }
-  if (!servesCity(trip.originCity)) return null;
-  const surge = surgeMultiplier(date, 0.3);
-  const own = tariffPrice(TARIFFS.own, trip.distanceKm, trip.durationMinutes) * surge;
-  const finalPrice = competitorMin != null
-    ? Math.max(ABS_MIN, Math.min(own, competitorMin * UNDERCUT))
-    : own;
-  const rounded = Math.round(finalPrice * 100) / 100;
-  return {
-    provider: "TaxiGeld", price: rounded, priceLow: rounded, priceHigh: rounded,
-    pickupEtaMinutes: 3, durationMinutes: trip.durationMinutes, rating: 4.9,
-    surge, isEstimate: false, isBookable: true, note: null,
-  };
+  const km = roadKm(city, airport);
+  const sedan = round5(km * 1.1 + 35);
+  return { sedan, van: round5(sedan * 1.2), fixed: false };
 }
 
-/* ---- PricingEngine (PricingEngine.swift) ------------------------------- */
-function quotesFor(trip, date) {
-  const competitors = [
-    estimate("Uber",        tariffPrice(TARIFFS.uber,  trip.distanceKm, trip.durationMinutes) * surgeMultiplier(date, 1.0), 4, trip.durationMinutes, 4.6, surgeMultiplier(date, 1.0), 0.12),
-    estimate("Bolt",        tariffPrice(TARIFFS.bolt,  trip.distanceKm, trip.durationMinutes) * surgeMultiplier(date, 0.8), 5, trip.durationMinutes, 4.4, surgeMultiplier(date, 0.8), 0.12),
-    estimate("Lokale taxi", tariffPrice(TARIFFS.local, trip.distanceKm, trip.durationMinutes), 8, trip.durationMinutes, 4.1, 1.0, 0.05),
-  ];
-  const competitorMin = Math.min(...competitors.map((q) => q.price));
-  const all = competitors.slice();
-  const mine = myTaxiQuote(trip, competitorMin, date);
-  if (mine) all.push(mine);
-  return all.sort((a, b) => a.price - b.price);
+function competitorFare(cityKey, airportCode, base, perKm, perMin, booking, minFare, vanFactor, isVan) {
+  const km = roadKm(CITIES[cityKey], AIRPORTS[airportCode]);
+  const min = Math.max(10, km * 0.8);
+  let price = base + perKm * km + perMin * min + booking;
+  price = Math.max(minFare, price);
+  if (isVan) price *= vanFactor;
+  return Math.round(price);
 }
 
-/* ---- Currency (RideQuote.swift nl_NL formatter) ------------------------ */
-const euroFmt = new Intl.NumberFormat("nl-NL", { style: "currency", currency: "EUR", minimumFractionDigits: 0, maximumFractionDigits: 0 });
-const euro = (n) => euroFmt.format(Math.round(n));
-const euroRange = (lo, hi) => `${euro(lo)} – ${euro(hi)}`;
+const euro = (n) => "€" + Math.round(n);
 
-/* ---- Booking deep-links (BookingLinks.swift) --------------------------- */
-const Booking = {
-  phone: "0362222222",
-  taxiGeldSite: "https://www.airportservicealmere.nl/",
-  boltWeb: "https://bolt.eu/nl-nl/",
-  uberURL(from, to) {
-    let s = "https://m.uber.com/ul/?action=setPickup";
-    s += `&pickup[latitude]=${from.lat}&pickup[longitude]=${from.lon}`;
-    s += `&dropoff[latitude]=${to.lat}&dropoff[longitude]=${to.lon}`;
-    return s.replace(/\[/g, "%5B").replace(/\]/g, "%5D");
-  },
-  open(provider, from, to) {
-    let url = this.taxiGeldSite;
-    if (provider === "Uber") url = this.uberURL(from, to);
-    else if (provider === "Bolt") url = this.boltWeb;
-    else if (provider === "Lokale taxi") url = "tel:" + this.phone;
-    window.open(url, "_blank", "noopener");
-  },
-};
+/* Build the three sorted comparison rows for a query. */
+function compareFares(cityKey, airportCode, paxType) {
+  const isVan = paxType === "van";
+  const own = ownFare(cityKey, airportCode);
+  const ownPrice = isVan ? own.van : own.sedan;
+  const uber = competitorFare(cityKey, airportCode, 3.5, 1.45, 0.30, 2.0, 8.5, 1.6, isVan);
+  const bolt = competitorFare(cityKey, airportCode, 2.5, 1.25, 0.25, 1.5, 7.0, 1.55, isVan);
+
+  const rows = [
+    { name: "Onze luchthaventaxi", ico: "🚕", price: ownPrice, own: true, fixed: own.fixed,
+      sub: own.fixed ? "Vaste prijs · vaste chauffeur" : "Vaste richtprijs · vaste chauffeur",
+      book: BOOKING_URL },
+    { name: "Uber", ico: "⬛", price: uber, sub: "Schatting · prijs varieert met drukte" },
+    { name: "Bolt", ico: "🟩", price: bolt, sub: "Schatting · prijs varieert met drukte" },
+  ].sort((a, b) => a.price - b.price);
+
+  const dearest = Math.max(...rows.map((r) => r.price));
+  const cheapest = rows[0].price;
+  return { rows, dearest, cheapest, fixed: own.fixed, isVan };
+}
 
 Object.assign(window, {
-  Geo, surgeMultiplier, quotesFor, euro, euroRange,
-  PROVIDERS, Booking, servesCity, isSchiphol,
+  BOOKING_URL, PHONE, AIRPORTS, CITIES, SCHIPHOL_FIXED,
+  ownFare, compareFares, euro,
 });

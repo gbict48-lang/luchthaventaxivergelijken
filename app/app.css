@@ -3,7 +3,7 @@
    Faithful to the iOS app (Theme.swift, CompareView, RideQuoteCard, …) and
    extended for the browser. Mobile-first: a centered app column.
    =========================================================================== */
-@import url('colors_and_type.css');
+@import url('../colors_and_type.css');
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }

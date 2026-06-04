@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://gbict48-lang.github.io/luchthaventaxivergelijken/sitemap.xml
+Sitemap: https://luchthaventaxivergelijken.nl/sitemap.xml
