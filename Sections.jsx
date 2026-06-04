@@ -77,12 +77,12 @@ function Footer() {
           <p className="muted" style={{ marginTop: 10 }}>Vaste prijzen voor luchthavenvervoer vanuit Almere, het Gooi en Flevoland.</p>
         </div>
         <div>
-          <h4>Populair</h4>
+          <h4>Populaire pagina's</h4>
           <ul className="muted">
-            <li>Taxi Almere → Schiphol</li>
-            <li>Taxi Almere → Eindhoven</li>
-            <li>Taxi Almere → Düsseldorf</li>
-            <li>Taxi naar Schiphol boeken</li>
+            <li><a href="schiphol-taxi-vergelijken/">Schiphol taxi vergelijken</a></li>
+            <li><a href="taxi-naar-schiphol-boeken/">Taxi naar Schiphol boeken</a></li>
+            <li><a href="taxi-naar-schiphol-bestellen/">Taxi naar Schiphol bestellen</a></li>
+            <li><a href="taxi-naar-schiphol-vergelijken/">Taxi naar Schiphol vergelijken</a></li>
           </ul>
         </div>
         <div>

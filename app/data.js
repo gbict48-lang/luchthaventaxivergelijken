@@ -46,7 +46,7 @@ function surgeMultiplier(date, sensitivity) {
 
 /* ---- Providers (CompetitorProviders.swift + Provider.swift) ------------ */
 const PROVIDERS = {
-  TaxiGeld:     { name: "TaxiGeld",    tagline: "Onze eigen rit — gegarandeerd de scherpste prijs", tint: "var(--tg-brand)", icon: "badge-check", deepLink: false },
+  TaxiGeld:     { name: "Luchthaventaxi", tagline: "Onze eigen rit — gegarandeerd de scherpste prijs", tint: "var(--tg-brand)", icon: "badge-check", deepLink: false },
   Uber:         { name: "Uber",        tagline: "Geschatte prijs",            tint: "var(--tg-uber)",  icon: "car-front",   deepLink: true },
   Bolt:         { name: "Bolt",        tagline: "Geschatte prijs",            tint: "var(--tg-bolt)",  icon: "zap",         deepLink: true },
   "Lokale taxi":{ name: "Lokale taxi", tagline: "Geregeld maximumtarief",     tint: "var(--tg-local)", icon: "circle-user",  deepLink: false },
