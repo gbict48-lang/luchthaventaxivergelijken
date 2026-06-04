@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luchthaventaxi vergelijken — vaste prijs naar Schiphol, Eindhoven, Düsseldorf & meer</title>
+  <meta name="description" content="Vergelijk direct de vaste prijs van een luchthaventaxi vanaf Almere en omgeving naar Schiphol, Eindhoven, Rotterdam, Düsseldorf, Weeze, Brussel en Charleroi. Altijd de scherpste prijs — boek in één klik." />
+  <meta name="theme-color" content="#0a7d3f" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="/">
+      <span class="logo-badge">✈︎€</span>
+      <span class="logo-text">Luchthaventaxi<strong>Vergelijken</strong></span>
+    </a>
+    <nav class="nav">
+      <a href="#vergelijk">Vergelijk</a>
+      <a href="#luchthavens">Luchthavens</a>
+      <a href="#waarom">Waarom wij</a>
+      <a class="nav-cta" href="tel:0362222222">📞 036&nbsp;2222222</a>
+    </nav>
+  </header>
+
+  <!-- HERO + REKENTOOL -->
+  <section class="hero" id="vergelijk">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <h1>De goedkoopste <span class="accent">luchthaventaxi</span> vanaf Almere</h1>
+        <p class="lead">Vergelijk in 5 seconden de vaste prijs naar elke luchthaven — en boek met een vaste chauffeur, zonder verrassingen.</p>
+        <ul class="hero-points">
+          <li>✅ Vaste prijs, geen taximeter</li>
+          <li>✅ 24/7 · vaste chauffeur</li>
+          <li>✅ Van én naar de luchthaven</li>
+        </ul>
+      </div>
+
+      <div class="calc card">
+        <h2 class="calc-title">Bereken je vaste prijs</h2>
+        <form id="fareForm">
+          <label class="field">
+            <span>Vertrek / bestemming (plaats)</span>
+            <select id="city" required></select>
+          </label>
+          <label class="field">
+            <span>Luchthaven</span>
+            <select id="airport" required></select>
+          </label>
+          <label class="field">
+            <span>Aantal personen</span>
+            <select id="pax">
+              <option value="sedan">1–4 personen (taxi)</option>
+              <option value="van">5–8 personen (minibus)</option>
+            </select>
+          </label>
+          <button class="btn-primary" type="submit">Vergelijk prijzen</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTATEN -->
+  <section class="results-wrap">
+    <div class="container">
+      <div id="resultsMeta" class="results-meta"></div>
+      <div id="results" class="results"></div>
+      <p class="disclaimer" id="disclaimer"></p>
+    </div>
+  </section>
+
+  <!-- LUCHTHAVENS -->
+  <section class="airports" id="luchthavens">
+    <div class="container">
+      <h2 class="section-title">Wij rijden naar alle grote luchthavens</h2>
+      <div class="airport-grid" id="airportGrid"></div>
+    </div>
+  </section>
+
+  <!-- WAAROM -->
+  <section class="why" id="waarom">
+    <div class="container">
+      <h2 class="section-title">Waarom via ons boeken?</h2>
+      <div class="why-grid">
+        <div class="why-card"><div class="why-ico">💶</div><h3>Vaste prijs</h3><p>Vooraf bekend, geen taximeter, geen nacht- of bagagetoeslag.</p></div>
+        <div class="why-card"><div class="why-ico">🕒</div><h3>Altijd op tijd</h3><p>We houden je vluchttijd in de gaten en staan klaar wanneer je landt.</p></div>
+        <div class="why-card"><div class="why-ico">👨‍✈️</div><h3>Vaste chauffeurs</h3><p>Ervaren, vriendelijke chauffeurs die de weg kennen.</p></div>
+        <div class="why-card"><div class="why-ico">🚐</div><h3>Taxi of minibus</h3><p>Van 1 tot 8 personen, met ruimte voor al je bagage.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-band">
+    <div class="container cta-inner">
+      <div>
+        <h2>Klaar om te boeken?</h2>
+        <p>Reserveer minimaal 1 uur vooraf voor de vaste prijs.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn-primary" href="https://www.airportservicealmere.nl/" target="_blank" rel="noopener">Boek online</a>
+        <a class="btn-ghost" href="tel:0362222222">📞 036 2222222</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="logo"><span class="logo-badge">✈︎€</span><span class="logo-text">Luchthaventaxi<strong>Vergelijken</strong></span></div>
+        <p class="muted">Vaste prijzen voor luchthavenvervoer vanuit Almere, het Gooi en Flevoland.</p>
+      </div>
+      <div>
+        <h4>Populair</h4>
+        <ul class="muted">
+          <li>Taxi Almere → Schiphol</li>
+          <li>Taxi Almere → Eindhoven</li>
+          <li>Taxi Almere → Düsseldorf</li>
+          <li>Taxi naar Schiphol boeken</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="muted">
+          <li>📞 <a href="tel:0362222222">036 2222222</a></li>
+          <li>🌐 <a href="https://www.airportservicealmere.nl/" target="_blank" rel="noopener">airportservicealmere.nl</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container sub">
+      <p class="muted">Prijzen voor Schiphol zijn vaste tarieven. Prijzen voor overige luchthavens en die van Uber/Bolt zijn richtprijzen ter vergelijking.</p>
+      <p class="muted">© <span id="year"></span> LuchthaventaxiVergelijken</p>
+    </div>
+  </footer>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
