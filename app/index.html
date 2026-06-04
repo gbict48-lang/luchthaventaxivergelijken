@@ -46,6 +46,9 @@
         if (sortOption === "cheapest") q.sort((a, b) => a.price - b.price);
         else if (sortOption === "fastest") q.sort((a, b) => a.pickupEtaMinutes - b.pickupEtaMinutes);
         else q.sort((a, b) => b.rating - a.rating);
+        // Onze luchthaventaxi altijd bovenaan, ongeacht sortering of locatie.
+        const mi = q.findIndex((x) => x.provider === "TaxiGeld");
+        if (mi > 0) q.unshift(q.splice(mi, 1)[0]);
         return q;
       }, [raw, sortOption]);
 

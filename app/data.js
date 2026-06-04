@@ -103,7 +103,7 @@ function myTaxiQuote(trip, competitorMin, date) {
       note: `Vaste prijs · tot 4 pers. · minibus €${Math.round(match.fare.minibus)} (tot 8)`,
     };
   }
-  if (!servesCity(trip.originCity)) return null;
+  // Onze taxi doet ALTIJD mee (elke locatie) en onderbiedt de goedkoopste concurrent.
   const surge = surgeMultiplier(date, 0.3);
   const own = tariffPrice(TARIFFS.own, trip.distanceKm, trip.durationMinutes) * surge;
   const finalPrice = competitorMin != null

@@ -64,8 +64,8 @@ function DotGlobe({ spin = 1 }) {
 
       // atmosphere halo
       const g = ctx.createRadialGradient(W / 2, H / 2, R * 0.6, W / 2, H / 2, R * 1.25);
-      g.addColorStop(0, "rgba(0,217,117,0.10)");
-      g.addColorStop(1, "rgba(0,217,117,0)");
+      g.addColorStop(0, "rgba(56,182,255,0.10)");
+      g.addColorStop(1, "rgba(56,182,255,0)");
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(W / 2, H / 2, R * 1.25, 0, Math.PI * 2); ctx.fill();
 
@@ -86,7 +86,7 @@ function DotGlobe({ spin = 1 }) {
         const steps = 26;
         const pa = arc.a, pb = arc.b;
         ctx.lineWidth = 1.4;
-        ctx.strokeStyle = "rgba(0,217,117,0.28)";
+        ctx.strokeStyle = "rgba(56,182,255,0.28)";
         ctx.beginPath();
         let started = false;
         const pts = [];
@@ -111,7 +111,7 @@ function DotGlobe({ spin = 1 }) {
         if (pp && pp.z > -0.2) {
           ctx.beginPath();
           ctx.fillStyle = "rgba(120,255,200,0.95)";
-          ctx.shadowColor = "rgba(0,217,117,0.9)";
+          ctx.shadowColor = "rgba(56,182,255,0.9)";
           ctx.shadowBlur = 10;
           ctx.arc(pp.x, pp.y, 2.6, 0, Math.PI * 2);
           ctx.fill();

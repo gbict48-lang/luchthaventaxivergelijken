@@ -92,7 +92,7 @@ function TrafficBackground() {
         r.r += 220 * dt; r.life -= dt * 1.6;
         if (r.life <= 0) { ripples.splice(i, 1); continue; }
         ctx.beginPath();
-        ctx.strokeStyle = `rgba(0,217,117,${0.5 * r.life})`;
+        ctx.strokeStyle = `rgba(56,182,255,${0.5 * r.life})`;
         ctx.lineWidth = 2;
         ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
         ctx.stroke();

@@ -13,11 +13,11 @@
 
 :root {
   /* ---- BRAND COLORS ---------------------------------------------------- */
-  --green:         #0a7d3f;   /* primary brand green — CTAs, links, accents  */
-  --green-bright:  #00c764;   /* bright lime-green — gradients, highlights   */
-  --green-deep:    #073018;   /* deep forest — hero/CTA gradient floor       */
-  --green-mid:     #0a3d24;   /* mid forest — hero gradient ceiling          */
-  --accent-mint:   #9cffc7;   /* mint accent — headline highlight on dark    */
+  --green:         #2b8fd6;   /* primary brand — baby blue (CTAs, links)     */
+  --green-bright:  #5cc1ff;   /* bright sky/baby blue — gradients, highlights */
+  --green-deep:    #0a2f52;   /* deep navy — hero/CTA gradient floor          */
+  --green-mid:     #0d3a63;   /* mid blue — hero gradient ceiling             */
+  --accent-mint:   #bfe6ff;   /* light blue accent — headline highlight       */
 
   /* ---- INK / NEUTRALS -------------------------------------------------- */
   --ink:           #0e1726;   /* primary text + dark footer ground           */
@@ -27,7 +27,7 @@
   --line:          #e6e9ef;   /* hairline borders, dividers                  */
 
   /* ---- TINTS (derived) ------------------------------------------------- */
-  --green-wash:    #eef6f0;   /* pale green chip / icon tile background       */
+  --green-wash:    #eaf4fd;   /* pale blue chip / icon tile background        */
   --gray-chip:     #eef0f3;   /* neutral chip background                      */
   --footer-line:   #1d2840;   /* divider on dark footer                       */
   --footer-muted:  #8c97a8;   /* muted text on dark footer                    */
@@ -43,9 +43,9 @@
 
   /* ---- BRAND GRADIENTS ------------------------------------------------- */
   --grad-brand:    linear-gradient(135deg, var(--green-bright), var(--green));
-  --grad-hero:     linear-gradient(135deg, #0a3d24 0%, #0a7d3f 55%, #073018 100%);
-  --grad-hero-glow: radial-gradient(1200px 500px at 80% -10%, rgba(0,199,100,.35), transparent 60%);
-  --grad-cta:      linear-gradient(135deg, #0a7d3f, #073018);
+  --grad-hero:     linear-gradient(135deg, #0d3a63 0%, #2b8fd6 55%, #0a2f52 100%);
+  --grad-hero-glow: radial-gradient(1200px 500px at 80% -10%, rgba(92,193,255,.38), transparent 60%);
+  --grad-cta:      linear-gradient(135deg, #2b8fd6, #0a2f52);
 
   /* ---- TYPE FAMILIES --------------------------------------------------- */
   --font-brand: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -84,8 +84,8 @@
 
   /* ---- ELEVATION ------------------------------------------------------- */
   --shadow-card:  0 10px 30px rgba(16,23,38,.08);
-  --shadow-best:  0 12px 30px rgba(0,199,100,.18);
-  --shadow-btn:   0 8px 20px rgba(10,125,63,.35);
+  --shadow-best:  0 12px 30px rgba(92,193,255,.22);
+  --shadow-btn:   0 8px 20px rgba(43,143,214,.35);
 
   /* ---- SPACING (8pt-ish, as used) -------------------------------------- */
   --sp-1: 6px;
@@ -159,11 +159,11 @@
   --tg-bg:          #0d0f14;   /* app background           rgb(.05 .06 .08) */
   --tg-surface:     #1a1c24;   /* card surface             rgb(.10 .11 .14) */
   --tg-surface-2:   #242630;   /* elevated surface         rgb(.14 .15 .19) */
-  --tg-bg-grad:     radial-gradient(1100px 620px at 70% -8%, rgba(0,217,117,.14), transparent 60%), #0d0f14;
+  --tg-bg-grad:     radial-gradient(1100px 620px at 70% -8%, rgba(56,182,255,.16), transparent 60%), #0d0f14;
 
   /* brand + accents */
-  --tg-brand:       #00d975;   /* TaxiGeld green           rgb(.00 .85 .46) */
-  --tg-brand-dim:   #00a85a;
+  --tg-brand:       #38b6ff;   /* brand baby blue */
+  --tg-brand-dim:   #1f93e6;
   --tg-accent:      #5c8cff;   /* blue (origin dot)        rgb(.36 .55 1.0) */
   --tg-warning:     #ffb833;   /* surge / amber            rgb(1.0 .72 .20) */
 
@@ -188,9 +188,9 @@
 
   /* elevation — green glow on the cheapest / primary, soft black otherwise */
   --tg-shadow-card:  0 10px 30px rgba(0,0,0,.35);
-  --tg-shadow-glow:  0 12px 30px rgba(0,217,117,.22);
-  --tg-shadow-btn:   0 8px 22px rgba(0,217,117,.40);
-  --tg-shadow-hero:  0 14px 40px rgba(0,217,117,.28);
+  --tg-shadow-glow:  0 12px 30px rgba(56,182,255,.24);
+  --tg-shadow-btn:   0 8px 22px rgba(56,182,255,.42);
+  --tg-shadow-hero:  0 14px 40px rgba(56,182,255,.30);
 }
 
 /* Apply to a root container to opt a tree into the dark app theme. */

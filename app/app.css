@@ -75,7 +75,7 @@ button { font-family: inherit; }
 .chip { font-size: 12.5px; font-weight: 600; color: var(--tg-text-2); background: var(--tg-surface-2);
   border: 1px solid var(--tg-hairline); padding: 7px 12px; border-radius: var(--tg-r-pill); cursor: pointer; }
 .chip:hover { color: var(--tg-text); }
-.chip.active { background: rgba(0,217,117,.16); border-color: rgba(0,217,117,.5); color: var(--tg-brand); }
+.chip.active { background: rgba(56,182,255,.16); border-color: rgba(56,182,255,.5); color: var(--tg-brand); }
 
 /* ---- primary button ---------------------------------------------------- */
 .btn-primary { margin-top: 14px; width: 100%; height: 54px; border: 0; border-radius: var(--tg-r-card);
@@ -84,7 +84,7 @@ button { font-family: inherit; }
   box-shadow: var(--tg-shadow-btn); transition: transform .15s cubic-bezier(.34,1.4,.6,1), filter .15s; }
 .btn-primary:hover { filter: brightness(1.05); }
 .btn-primary:active { transform: scale(.97); }
-.btn-primary:disabled { background: rgba(0,217,117,.38); color: rgba(4,20,12,.7); box-shadow: none; cursor: not-allowed; }
+.btn-primary:disabled { background: rgba(56,182,255,.38); color: rgba(4,20,12,.7); box-shadow: none; cursor: not-allowed; }
 .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(4,20,12,.35); border-top-color: #04140c;
   border-radius: 50%; animation: tg-spin .7s linear infinite; }
 @keyframes tg-spin { to { transform: rotate(360deg); } }
@@ -110,7 +110,7 @@ button { font-family: inherit; }
   border: 1px solid var(--tg-hairline); border-radius: var(--tg-r-result); }
 @keyframes tg-rise { from { transform: translateY(14px); } to { transform: none; } }
 .quote.cheapest { border-color: var(--tg-brand); box-shadow: var(--tg-shadow-glow); }
-@keyframes tg-pulse { 0%,100% { border-color: rgba(0,217,117,.45); } 50% { border-color: rgba(0,217,117,1); } }
+@keyframes tg-pulse { 0%,100% { border-color: rgba(56,182,255,.45); } 50% { border-color: rgba(56,182,255,1); } }
 .q-icon { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; flex: none; }
 .q-main { flex: 1; min-width: 0; }
 .q-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }

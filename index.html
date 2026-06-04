@@ -10,7 +10,7 @@
   <meta name="keywords" content="luchthaventaxi vergelijken, taxi naar Schiphol, schiphol taxi Almere, taxi naar Schiphol boeken, taxi naar Schiphol bestellen, taxi Almere Schiphol vaste prijs, taxi Eindhoven Airport, taxi Düsseldorf, luchthavenvervoer Almere, vliegveldtaxi Gooi" />
   <link rel="canonical" href="https://luchthaventaxivergelijken.nl/" />
   <meta name="robots" content="index,follow,max-image-preview:large" />
-  <meta name="theme-color" content="#0a7d3f" />
+  <meta name="theme-color" content="#2b8fd6" />
   <meta name="author" content="Airportservice Almere" />
   <meta name="geo.region" content="NL-FL" />
   <meta name="geo.placename" content="Almere" />
@@ -145,6 +145,9 @@
               return { ...q, price: Math.round(q.price * f), note: null };
             }).sort((a, b) => a.price - b.price);
           }
+          // Onze luchthaventaxi altijd bovenaan, ongeacht locatie.
+          const mineIdx = qs.findIndex((q) => q.provider === "TaxiGeld");
+          if (mineIdx > 0) qs.unshift(qs.splice(mineIdx, 1)[0]);
           setRaw(qs);
           setSummary(`${m.km.toFixed(1)} km · ±${m.minutes} min rijden (schatting)`);
           setBusy(false);
